@@ -108,3 +108,28 @@ function dateDifference($date)
 	else
 		return $diff->s.' second'.($diff->s == 1 ? '' : 's');
 }
+
+/**
+ * Outputs the datetime in readable format
+ *
+ * @param datetime
+ * @return void
+ **/
+function fuzzy_date($input)
+{
+	return reorderDate($input, 'Y-m-d H:i:s', Settings::get('date_format'));
+}
+
+/**
+ * Reorder a date in string format
+ *
+ * @param String input
+ * @param String currentFormat
+ * @param String newFormat
+ * @return String output
+**/
+function reorderDate($input, $currentFormat, $newFormat = NULL) {
+	if ($newFormat == NULL)
+		$newFormat = Settings::get('date_format');
+	return DateTime::createFromFormat($currentFormat, $input)->format($newFormat);
+}
