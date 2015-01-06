@@ -20,7 +20,7 @@ class Emails {
     			mail(trim($email), $subject, $content, $headers);
     		}
 		} else {
-			mail($email, $subject, $content, $headers);
+			mail($emails, $subject, $content, $headers);
 		}
 	 }
 

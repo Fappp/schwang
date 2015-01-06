@@ -20,7 +20,7 @@ if ($email != '') {
 				// Name isn't blank
 				if (!Users::emailUsed($email)) {
 					// Email isn't used
-					register($email, $password, $name);
+					Users::register($email, $password, $name);
 					Notifications::notice('User created');
 					redirect('/settings/users');
 				} else {

@@ -21,7 +21,7 @@ require_once('app/options.php');
 // Session
 // =======================================
 
-session_start();
+if (!session_id()) session_start();
 
 // =======================================
 // Database
@@ -100,12 +100,11 @@ LoggedUser::updateLastOnline();
 // Reset System
 // =======================================
 
-// Eshots::reset();
 // Users::reset();
 // Settings::reset();
 
-// Settings::set('site_name', 'EShot Manager');
-// Settings::set('date_format', 'dS M Y H:i:s');
+// Settings::set('site_name', 'My Website');
+// Settings::set('date_format', 'H:i, jS M Y');
 // Settings::set('admins', '1');
 // Settings::set('status_change_emails', '');
 
