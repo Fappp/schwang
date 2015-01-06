@@ -2,6 +2,10 @@
 
 // Used for registrations
 
+// new-email
+// new-password
+// new-name
+
 // Grab submitted data
 $email = isset($_POST['new-email']) ? $_POST['new-email'] : '';
 $password = isset($_POST['new-password']) ? $_POST['new-password'] : '';
@@ -22,24 +26,24 @@ if ($email != '') {
 					// Email isn't used
 					Users::register($email, $password, $name);
 					Notifications::notice('User created');
-					redirect('/settings/users');
+					redirect('/');
 				} else {
 					Notifications::alert('That email address has been used already');
-					redirect('/settings/users');
+					redirect('/');
 				}
 			} else {
 				Notifications::alert('Please enter a name');
-				redirect('/settings/users');
+				redirect('/');
 			}
 		} else {
 			Notifications::alert('Please enter a password');
-			redirect('/settings/users');
+			redirect('/');
 		}
 	} else {
 		Notifications::alert('Please enter a valid email address');
-		redirect('/settings/users');
+		redirect('/');
 	}
 } else {
 	Notifications::alert('Please enter an email address');
-	redirect('/settings/users');
+	redirect('/');
 }

@@ -2,6 +2,9 @@
 
 // Used for logins
 
+// email
+// password
+
 redirectIfLoggedIn();
 
 // Grab submitted data
@@ -18,7 +21,7 @@ if ($email != '') {
 				if ($user['password'] == $password) {
 					login($email);
 					Notifications::notice('You logged in successfully');
-					redirect('/schedule');
+					redirect('/');
 				} else {
 					Notifications::alert('Incorrect password');
 					redirect('/login');
