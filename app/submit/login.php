@@ -17,7 +17,7 @@ if ($email != '') {
 		if ($password != '') {
 			$password = encrypt($password);
 			if (Users::emailUsed($email)) {
-				$user = User::getBy('email', $email);
+				$user = Users::getBy('email', $email);
 				if ($user['password'] == $password) {
 					login($email);
 					Notifications::notice('You logged in successfully');

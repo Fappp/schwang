@@ -4,7 +4,7 @@
 	<h1>Login</h1>
 </div>
 
-<div class="col-xs-12 well well-lg">
+<div class="col-xs-12">
 
 	<?php form_init('login') ?>
 

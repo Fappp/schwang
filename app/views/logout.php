@@ -1,5 +1,5 @@
 <?php if ( !defined( 'ABSPATH' ) ) exit;
 logout();
-clearNotifications();
-setNotice('Logged out');
+Notifications::clear();
+Notifications::notice('Logged out');
 redirect('/login');

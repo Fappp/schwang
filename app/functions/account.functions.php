@@ -24,7 +24,7 @@ function login($email)
 {
 	if (!loggedIn()) {
 		$_SESSION['loggedIn'] = true;
-		$user = getUser($email);
+		$user = Users::getBy('email', $email);
 		$user['password'] = '';
 		$_SESSION['user'] = $user;
 		unset($_SESSION['user']['password']);
