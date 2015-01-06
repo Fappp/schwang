@@ -2,7 +2,7 @@
 
 // schwang
 // Nik Sudan 2015
-// v0.2
+// v0.3
 // https://github.com/NikSudan/schwang
 
 // =======================================

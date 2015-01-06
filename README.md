@@ -3,7 +3,7 @@ schwang
 
 Simplistic PHP Web Framework
 
-Version: <code>0.2</code>
+Version: <code>0.3</code>
 
 # Notes
 
