@@ -24,7 +24,7 @@ class Users {
 		) AUTO_INCREMENT=1 ;
 		";
 		mysqli_query($con, $query);
-		self::register(ADMIN_EMAIL, ADMIN_PASSWORD, 'Admin');
+		self::register(ADMIN_EMAIL, ADMIN_PASS, 'Admin');
 		logout();
 	}
 
@@ -165,7 +165,18 @@ class Users {
 	 **/
 	function getAdmins()
 	{
-		return Settings::get('admins');
+		return json_decode(Settings::get('admins'));
 	}
+
+	/**
+	 * Check if an account is an admin
+	 *
+	 * @return array admins
+	 **/
+	function isAdmin($id)
+	{
+		$admins = self::getAdmins();
+		return (in_array($id, $admins)) ? true : false;
+
 
 }
