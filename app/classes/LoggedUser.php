@@ -24,7 +24,7 @@ class LoggedUser {
 	 **/
 	public static function isAdmin()
 	{
-		$admins = explode(',', Users::getAdmins());
+		$admins = Users::getAdmins();
 		return (in_array(self::get('id'), $admins)) ? true : false;
 	}
 
