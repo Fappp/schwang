@@ -119,11 +119,25 @@ if ($currentPage == 'submit') {
 
 	if (in_array($page, getParts('/app/submit'))) {
 		require(ROOTDIR.'/app/submit/'.$page.'.php');
-	} else {
-		Pages::show('404');
 	}
 
 }
+
+// =======================================
+// AJAX Requests
+// =======================================
+
+if ($currentPage == 'ajax') {
+
+	$page = Pages::get('404');
+	Notifications::clear();
+
+	if (in_array($page, getParts('/app/ajax'))) {
+		require(ROOTDIR.'/app/ajax/'.$page.'.php');
+	}
+
+}
+
 
 // =======================================
 // Page Content
