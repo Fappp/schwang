@@ -16,6 +16,17 @@ function page()
 }
 
 /**
+ * Part inclusion
+ *
+ * @param string name
+ * @return void
+ **/
+function part($name)
+{
+	include ROOTDIR.'/app/parts/'.$name.'.php';
+}
+
+/**
  * Form declaration
  *
  * @param params
