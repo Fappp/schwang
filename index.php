@@ -1,153 +1,68 @@
 <?php
-
-// schwang
-// Nik Sudan 2015
-// v0.3
-// https://github.com/NikSudan/schwang
-
-// =======================================
-// Constants
-// =======================================
-
-// Prevents direct access
-define('ABSPATH', true);
-
-// Root directory
-define('ROOTDIR', __DIR__);
-
-require_once('app/options.php');
-
-// =======================================
-// Session
-// =======================================
-
-if (!session_id()) session_start();
-
-// =======================================
-// Database
-// =======================================
-
-// Start connection
-global $con;
-$con = mysqli_connect(DB_HOST, DB_USER, DB_PASS, DB_TABLE);
-
-// Database errors
-if (mysqli_connect_errno()) {
-	die(sprintf('<h1>Database Error</h1><p>%s</p>', mysqli_connect_error()));
-}
-
-// =======================================
-// Libraries
-// =======================================
-
 /**
- * Returns array of php files
- *
- * @param string directory
- * @return array filenames
- **/
-function getParts($dir) {
-	$parts = (scandir(ROOTDIR.$dir));
-	$validParts = array();
-	foreach ($parts as $part) {
-		if (strpos($part, '.php') !== FALSE) {
-			array_push($validParts, str_replace('.php', '', $part));
-		}
+ * @package shwang
+ * @author Nik Sudan
+ */
+
+// Website root directory
+define( 'DIR', __DIR__ );
+
+// Setup medoo framework for database interaction
+require_once( '/lib/medoo.min.php' );
+global $db;
+$db = new medoo( [
+    'database_type' 	=> 'mysql',
+    'database_name' 	=> '',
+    'server' 			=> '',
+    'username' 			=> '',
+    'password' 			=> '',
+    'charset' 			=> 'utf8'
+] );
+
+// Load directory helper for core loading
+require_once( '/app/core/directoryhelper.php' );
+
+// Resource directories to load
+$resources = [
+	'/app/core',
+	'/app/classes',
+	'/app/helpers',
+	'/app/models'
+];
+ 
+// Start a session for keeping track of various local user information
+if ( !session_id() ) {
+    session_start();
+}
+
+// Load resources
+foreach ( $resources as $location ) {
+	foreach ( DirectoryHelper::load( $location ) as $resource ) {
+		include $location . '/' . $resource;
 	}
-	return $validParts;
 }
 
-// Classes
-$classes = getParts('/app/classes');
-foreach ($classes as $class) {
-	include 'app/classes/'.$class.'.php';
+// Parse the URL
+global $url;
+$url = new UrlParser();
+
+// Figure out what controller to use
+$controller = $url->shift();
+
+// Fallback controller for homepage
+if ( !$controller ) {
+	$controller = 'index';
 }
 
-// Functions
-$functions = getParts('/app/functions');
-foreach ($functions as $function) {
-	include 'app/functions/'.$function.'.php';
+// Load the controller
+$controllerPath = 'app/controllers/' . strtolower( $controller ) . '.php';
+
+if ( file_exists( $controllerPath ) ) {
+	require $controllerPath;
+	$className = ucwords( $controller ) . 'Controller';
+	$page = new $className( $controller );
+
+// Controller doesn't exist, so show a 404
+} else {
+	show_404();
 }
-
-// Helpers
-$helpers = getParts('/app/helpers');
-foreach ($helpers as $helper) {
-	include 'app/helpers/'.$helper.'.php';
-}
-
-// =======================================
-// URL Structure
-// =======================================
-
-// URL parts
-global $elements;
-$elements = preg_split('/(\/|\?)/', ltrim($_SERVER['REQUEST_URI'], '/'));
-foreach ($elements as $i => $e) {
-	if ($e == '') unset($elements[$i]);
-}
-$elements = array_values($elements);
-
-global $currentPage;
-$currentPage = Pages::get('home');
-
-// =======================================
-// User Update
-// =======================================
-
-LoggedUser::updateLastOnline();
-
-// =======================================
-// Reset System
-// =======================================
-
-// Users::reset();
-// Settings::reset();
-
-// Settings::set('site_name', 'My Website');
-// Settings::set('date_format', 'H:i, jS M Y');
-// Settings::set('admins', '1');
-// Settings::set('status_change_emails', '');
-
-// =======================================
-// Form Submission
-// =======================================
-
-if ($currentPage == 'submit') {
-
-	$page = Pages::get('404');
-	Notifications::clear();
-
-	if (in_array($page, getParts('/app/submit'))) {
-		require(ROOTDIR.'/app/submit/'.$page.'.php');
-	}
-
-}
-
-// =======================================
-// AJAX Requests
-// =======================================
-
-if ($currentPage == 'ajax') {
-
-	$page = Pages::get('404');
-	Notifications::clear();
-
-	if (in_array($page, getParts('/app/ajax'))) {
-		require(ROOTDIR.'/app/ajax/'.$page.'.php');
-	}
-
-}
-
-
-// =======================================
-// Page Content
-// =======================================
-
-include 'app/parts/header.php';
-
-if (in_array($currentPage, getParts('/app/views')))
-	Pages::show($currentPage);
-else
-	Pages::show('404');
-
-include 'app/parts/footer.php';
