@@ -81,7 +81,6 @@ Now in each of your controllers, you can access the model by using `$this->{mode
 
 ```
 $this->data['users'] = $this->users->select( 'name' )->where( [ 'active' => '1' ] )->get();
- )
 ```
 
 ## Helpers and Classes
